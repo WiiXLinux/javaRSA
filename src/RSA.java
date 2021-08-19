@@ -38,15 +38,14 @@ public class RSA {
 
 	public long ggt(long a, long b) {
 
-		if (a == 0)
-			return b;
 		while (b != 0) {
-			if (a > b)
-				a = a - b;
-			else
-				b = b - a;
+			long h = a % b;
+			a = b;
+			b = h;
 		}
+
 		return a;
+
 	}
 
 	public boolean divIsNat(long a, long b) {
@@ -84,15 +83,29 @@ public class RSA {
 		return privateKey;
 	}
 
+	private BigDecimal bigMath(BigDecimal a, long b, long c) {
+		BigDecimal Bi = a;
 
-	public long encrypt(long input) {
-		return (long)(Math.pow(input,publicHalf1)%publicHalf2);
+		Bi = Bi.pow((int) b);
+		Bi = Bi.remainder(new BigDecimal(c));
+		return Bi;
+	}
+	
+	public BigDecimal encrypt(BigDecimal input) {
+		return bigMath(input, getPublicKey()[0], getPublicKey()[1]);
+	}
+
+	public BigDecimal decrypt(BigDecimal input) {
+		return bigMath(input, getPrivateKey(), getPublicKey()[1]);
+	}
+
+	public BigDecimal encrypt(long input) {
+		return bigMath(new BigDecimal(input), getPublicKey()[0], getPublicKey()[1]);
 
 	}
 
-
-	public long decrypt(long input) {
-		return (long)(Math.pow(input,privateKey)%publicHalf2);
+	public BigDecimal decrypt(long input) {
+		return bigMath(new BigDecimal(input), getPrivateKey(), getPublicKey()[1]);
 	}
 
 
