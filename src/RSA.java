@@ -1,21 +1,16 @@
+import java.math.BigDecimal;
 
 public class RSA {
 
-	private final long prime1;
-	private final long prime2;
 	private final long euler;
 	private final long publicHalf1;
 	private final long publicHalf2;
-
-
-
+	
 	private final long[] publicKey;
 	private final long privateKey;
 
 	public RSA(long prime1, long prime2) {
 		System.out.println("Configuring RSA");
-		this.prime1 = prime1;
-		this.prime2 = prime2;
 		this.euler = (1 - prime1) * (1 - prime2);
 		System.out.println("Calculating the public key");
 		this.publicHalf1 = ggtPrime();
@@ -26,7 +21,7 @@ public class RSA {
 		System.out.println("Keys ready");
 	}
 
-	public long ggtPrime() {
+	private long ggtPrime() {
 		long temp = euler - 1;
 		long number = 0;
 		while (number != 1) {
@@ -36,7 +31,7 @@ public class RSA {
 		return temp + 1;
 	}
 
-	public long ggt(long a, long b) {
+	private long ggt(long a, long b) {
 
 		while (b != 0) {
 			long h = a % b;
@@ -48,7 +43,7 @@ public class RSA {
 
 	}
 
-	public boolean divIsNat(long a, long b) {
+	private boolean divIsNat(long a, long b) {
 		long c = a / b;
 		return c * b == a;
 	}
@@ -90,6 +85,26 @@ public class RSA {
 		Bi = Bi.remainder(new BigDecimal(c));
 		return Bi;
 	}
+	
+	public BigDecimal[] encrypt(String in) {
+		char[] c = in.toCharArray();
+		BigDecimal[] temp = new BigDecimal[c.length];
+		for(int i = 0; i < c.length; i++) {
+			temp[i] = encrypt(new BigDecimal(c[i]));
+		}
+		return temp;
+	}
+	
+	public String decrypt(BigDecimal[] in) {
+		long[] temp = new long[in.length];
+		StringBuilder temp2 = new StringBuilder(in.length);
+		for(int i = 0; i < in.length; i++) {
+			temp[i] = decrypt((in[i])).longValue();
+			temp2.append((char)temp[i]);
+		}
+		return temp2.toString();
+	}
+	
 	
 	public BigDecimal encrypt(BigDecimal input) {
 		return bigMath(input, getPublicKey()[0], getPublicKey()[1]);

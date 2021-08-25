@@ -1,7 +1,7 @@
 
 public class Main {
 
-	public static String displayArray(long[]in){
+	public static String displayArray(Object[]in){
 		String temp = "";
 		for(int i = 0; i < in.length; i++){
 			temp = temp + "{" + in[i] + "}; ";
@@ -11,11 +11,11 @@ public class Main {
 
 
 	public static void main(String[] args) {
-		RSA rsa = new RSA(7,5);
-		System.out.println(rsa.encrypt(11));
-		System.out.println(rsa.decrypt(rsa.encrypt(11)));
+		RSA rsa = new RSA(37,41);
+		System.out.println(displayArray(rsa.encrypt("Hallo")));
+		System.out.println(rsa.decrypt(rsa.encrypt("Hallo")));
 
-
+		
 	}
 
 }
